@@ -66,96 +66,229 @@
       --cp-highlight: rgba(253, 142, 161, 0.12);
     }
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-padding-top: 20px; }
+    html { scroll-padding-top: 20px; scroll-behavior: smooth; }
     body {
       margin: 0; background: var(--cp-bg); color: var(--cp-text);
       font: 1rem/1.65 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
       word-break: keep-all; overflow-wrap: anywhere;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: var(--cp-text); text-underline-offset: .21em; text-decoration-color: var(--cp-accent); }
-    a:hover { color: var(--cp-accent-hover); }
+    a { color: var(--cp-link); text-underline-offset: .21em; }
+    a:hover { color: var(--cp-accent); }
     :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
-    .skip { position: absolute; inset: -100px auto auto 12px; z-index: 3; background: var(--cp-surface); padding: 8px; }
+    .skip { position: absolute; inset: -100px auto auto 12px; z-index: 20; background: var(--cp-accent); color: var(--cp-accent-fg); padding: 8px 14px; border-radius: .625rem; text-decoration: none; font-weight: 700; }
     .skip:focus { top: 12px; }
-    .layout { max-width: 1440px; margin: auto; display: grid; grid-template-columns: 220px minmax(0,1fr); align-items: start; }
-    nav { position: sticky; top: 0; max-height: 100vh; overflow-y: auto; padding: 32px 16px; }
-    nav p { margin: 0 0 12px; font-size: .86rem; font-weight: 750; padding-left: 8px; }
-    nav a { display: block; padding: 6px 8px; border-radius: .625rem; text-decoration: none; font-size: .9rem; }
-    nav a:hover { background: var(--cp-accent-soft); }
-    main { min-width: 0; padding: 24px clamp(16px, 3vw, 48px) 48px 0; }
-    header, section { margin-bottom: 16px; padding: clamp(20px, 3vw, 36px); border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .layout { max-width: 1380px; margin: auto; padding: 20px 16px 48px; display: grid; grid-template-columns: 248px minmax(0,1fr); gap: 24px; align-items: start; }
+    nav {
+      position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto;
+      padding: 16px 14px; background: var(--cp-panel-strong); border: 1px solid var(--cp-border);
+      border-radius: 16px; box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+    }
+    .nav-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 0 6px 10px; margin-bottom: 8px; border-bottom: 1px solid var(--cp-border);
+    }
+    nav p.nav-brand { margin: 0; font-size: .82rem; font-weight: 750; color: var(--cp-accent); letter-spacing: .02em; }
+    .nav-tools { display: flex; gap: 4px; }
+    .tool-btn {
+      appearance: none; background: var(--cp-surface-soft); color: var(--cp-text);
+      border: 1px solid var(--cp-border); border-radius: 8px; padding: 3px 8px;
+      font: 600 .74rem/1.35 inherit; cursor: pointer;
+    }
+    .tool-btn:hover { border-color: var(--cp-accent); color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .nav-group { display: block; font-size: .72rem; font-weight: 700; color: var(--cp-text-muted); padding: 8px 8px 3px; letter-spacing: .02em; }
+    nav a {
+      display: flex; align-items: baseline; gap: 8px; padding: 6px 8px; border-radius: .625rem;
+      color: var(--cp-text); text-decoration: none; font-size: .87rem; line-height: 1.38;
+      border-left: 3px solid transparent;
+    }
+    nav a .nav-num { font-size: .72rem; font-weight: 700; color: var(--cp-text-muted); min-width: 20px; font-variant-numeric: tabular-nums; }
+    nav a:hover, nav a[aria-current="location"] {
+      background: var(--cp-accent-soft); color: var(--cp-accent); border-left-color: var(--cp-accent); font-weight: 650;
+    }
+    nav a[aria-current="location"] .nav-num { color: var(--cp-accent); }
+    main { min-width: 0; }
+    header, section {
+      margin-bottom: 18px; padding: clamp(20px, 2.8vw, 34px); border: 1px solid var(--cp-border);
+      border-radius: 16px; background: var(--cp-surface);
+      box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+    }
     header { background: var(--cp-bg-elevated); border-top: 5px solid var(--cp-accent); }
-    h1 { font-size: clamp(1.95rem, 3.8vw, 3.05rem); line-height: 1.18; letter-spacing: -.035em; margin: 8px 0 16px; }
-    h2 { font-size: clamp(1.4rem, 2.2vw, 1.85rem); line-height: 1.32; letter-spacing: -.02em; margin: 0 0 12px; }
-    h3 { font-size: 1.12rem; line-height: 1.4; margin: 20px 0 8px; }
+    h1 { font-size: clamp(1.85rem, 3.2vw, 2.65rem); line-height: 1.2; letter-spacing: -.03em; margin: 10px 0 14px; }
+    h2 { font-size: clamp(1.35rem, 2vw, 1.72rem); line-height: 1.32; letter-spacing: -.02em; margin: 0 0 12px; }
+    h3 { font-size: 1.08rem; line-height: 1.4; margin: 20px 0 8px; }
     p { margin: 8px 0 12px; }
     ul, ol { margin: 8px 0 16px; padding-left: 24px; }
     li { margin: 6px 0; padding-left: 2px; }
     small, .muted { color: var(--cp-text-muted); }
-    .lead { max-width: 72ch; font-size: 1.12rem; }
-    .eyebrow { color: var(--cp-accent); font-size: .88rem; font-weight: 760; }
-    .label { display: inline-block; font-size: .86rem; line-height: 1.42; font-weight: 650; color: var(--cp-text-muted); }
+    .lead { max-width: 74ch; font-size: 1.06rem; color: var(--cp-text); }
+    .eyebrow {
+      display: inline-block; background: var(--cp-accent-soft); color: var(--cp-accent);
+      border: 1px solid var(--cp-accent); border-radius: .625rem; padding: 3px 10px;
+      font-size: .8rem; font-weight: 750;
+    }
+    .sec-kicker {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
+    .sec-tag {
+      display: inline-block; background: var(--cp-accent); color: var(--cp-accent-fg);
+      border-radius: 6px; padding: 2px 8px; font-size: .74rem; font-weight: 750; letter-spacing: .02em;
+    }
+    .sec-tag.neutral {
+      background: var(--cp-surface-soft); color: var(--cp-text); border: 1px solid var(--cp-border-strong);
+    }
+    .label { display: inline-block; font-size: .84rem; line-height: 1.42; font-weight: 700; color: var(--cp-text-muted); }
+    .quick-jump {
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px;
+      margin: 18px 0 6px;
+    }
+    .jump-card {
+      display: flex; flex-direction: column; gap: 4px; padding: 11px 12px;
+      background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: .625rem;
+      text-decoration: none; color: var(--cp-text);
+    }
+    .jump-card:hover { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-text); }
+    .jump-card .j-step { font-size: .73rem; font-weight: 750; color: var(--cp-accent); }
+    .jump-card strong { font-size: .9rem; line-height: 1.34; }
+    .jump-card span { font-size: .8rem; color: var(--cp-text-muted); line-height: 1.42; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .panel, .flow li { border: 1px solid var(--cp-border); background: var(--cp-surface-soft); padding: 16px; border-radius: .625rem; }
+    .panel.ok-top { border-top: 3px solid var(--cp-success); }
+    .panel.accent-top { border-top: 3px solid var(--cp-accent); }
     .panel h3 { margin-top: 0; }
     .panel p:last-child { margin-bottom: 0; }
+    .visual-box {
+      margin: 16px 0 18px; border: 1px solid var(--cp-border); border-radius: 14px;
+      background: var(--cp-bg-elevated); overflow: hidden; break-inside: avoid;
+    }
+    .visual-head {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 10px 16px; background: var(--cp-surface-soft); border-bottom: 1px solid var(--cp-border);
+    }
+    .visual-title { font-size: .9rem; font-weight: 750; color: var(--cp-text); display: flex; align-items: center; gap: 8px; }
+    .visual-badge {
+      display: inline-block; padding: 1px 7px; border-radius: 6px; font-size: .72rem; font-weight: 750;
+      background: var(--cp-accent-soft); color: var(--cp-accent); border: 1px solid var(--cp-accent);
+    }
+    .visual-hint { font-size: .76rem; color: var(--cp-text-muted); }
+    .visual-scroll {
+      padding: 14px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--cp-surface);
+    }
+    .visual-scroll svg { display: block; width: 100%; height: auto; }
+    .visual-scroll svg.wide-svg { min-width: 680px; }
+    .visual-cap {
+      margin: 0; padding: 9px 16px; font-size: .84rem; color: var(--cp-text-muted);
+      background: var(--cp-bg-elevated); border-top: 1px solid var(--cp-border);
+    }
     .callout { padding: 12px 16px; margin: 16px 0; border-left: 4px solid var(--cp-accent); border-radius: 0 .625rem .625rem 0; background: var(--cp-accent-soft); }
     .callout.caution { border-color: var(--cp-warning); background: var(--cp-surface-soft); }
-    .route { display: block; font-size: .93rem; padding: 8px 12px; margin: 8px 0; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: .625rem; }
+    .route {
+      display: block; font-size: .9rem; padding: 9px 12px; margin: 8px 0;
+      background: var(--cp-surface-soft); border: 1px solid var(--cp-border);
+      border-left: 3px solid var(--cp-accent); border-radius: .625rem;
+      font-family: Consolas, "Courier New", Courier, monospace;
+    }
     .flow { list-style: none; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); padding: 0; gap: 12px; }
-    .flow li { margin: 0; }
+    .flow li { margin: 0; border-top: 3px solid var(--cp-accent); background: var(--cp-surface); }
     .flow strong { display: block; margin: 4px 0; }
     .table-wrap { overflow-x: auto; margin: 12px 0; }
     table { border-collapse: collapse; width: 100%; }
-    caption { text-align: left; font-weight: 650; margin-bottom: 8px; }
+    caption { text-align: left; font-weight: 700; margin-bottom: 8px; }
     th, td { padding: 10px 12px; vertical-align: top; text-align: left; border-bottom: 1px solid var(--cp-border); }
-    thead th { background: var(--cp-surface-soft); }
-    .situation { display: flex; align-items: baseline; gap: 8px 12px; margin: 12px 0 16px; padding: 12px 16px; background: var(--cp-surface-soft); border-radius: .625rem; }
-    .situation strong { flex: 0 0 auto; color: var(--cp-accent); }
-    .method { margin-top: 16px; }
-    .case-diagram { margin: 20px 0 16px; break-inside: avoid; }
-    .case-diagram + .case-diagram { border-top: 1px solid var(--cp-border); padding-top: 16px; }
-    .case-diagram figcaption { margin-bottom: 8px; font-weight: 700; }
-    .case-diagram h3 { margin: 0; }
+    thead th { background: var(--cp-surface-soft); border-bottom: 2px solid var(--cp-border); }
+    tbody tr:hover { background: var(--cp-accent-soft); }
+    .situation {
+      display: flex; align-items: baseline; gap: 8px 12px; margin: 12px 0 16px;
+      padding: 12px 16px; background: var(--cp-bg-elevated); border: 1px solid var(--cp-border);
+      border-left: 4px solid var(--cp-accent); border-radius: .625rem;
+    }
+    .situation strong {
+      flex: 0 0 auto; background: var(--cp-accent); color: var(--cp-accent-fg);
+      padding: 2px 9px; border-radius: 6px; font-size: .8rem;
+    }
+    .method {
+      margin-top: 18px; padding: 8px 12px; background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border); border-left: 4px solid var(--cp-border-strong);
+      border-radius: 0 .625rem .625rem 0;
+    }
+    .case-diagram {
+      margin: 16px 0; padding: 16px; background: var(--cp-bg-elevated);
+      border: 1px solid var(--cp-border); border-radius: 12px; break-inside: avoid;
+    }
+    .case-diagram figcaption { margin-bottom: 10px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .case-diagram h3 { margin: 0; font-size: 1.02rem; }
     .diagram-steps {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px;
       margin: 0; padding: 0; list-style: none;
     }
     .diagram-steps > li {
-      position: relative; min-width: 0; margin: 0; padding: 12px 16px;
-      background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: .625rem;
+      position: relative; min-width: 0; margin: 0; padding: 12px 14px;
+      background: var(--cp-surface); border: 1px solid var(--cp-border);
+      border-top: 3px solid var(--cp-border-strong); border-radius: .625rem; font-size: .92rem;
     }
-    .diagram-steps > li:nth-child(2) { border-color: var(--cp-accent); }
+    .diagram-steps > li:nth-child(2) { border-top-color: var(--cp-accent); }
+    .diagram-steps > li:last-child { border-top-color: var(--cp-success); }
     .diagram-steps > li:not(:last-child)::after {
-      content: ""; position: absolute; top: calc(50% - 4px); right: -17px;
-      width: 8px; height: 8px; transform: rotate(45deg);
-      border-top: 2px solid var(--cp-accent); border-right: 2px solid var(--cp-accent);
+      content: "→"; position: absolute; top: 50%; right: -17px; transform: translateY(-50%);
+      width: 20px; height: 20px; border-radius: 50%; background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-accent); color: var(--cp-accent); font-size: .75rem; font-weight: 750;
+      display: grid; place-items: center; z-index: 1;
     }
-    .diagram-steps strong { display: block; margin-bottom: 4px; color: var(--cp-accent); }
-    .trouble-case + .trouble-case { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--cp-border); }
-    .steps > li { padding-bottom: 4px; }
-    .stats { font-size: 1.45rem; line-height: 1.25; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .diagram-steps strong {
+      display: inline-block; margin-bottom: 5px; padding: 1px 7px; border-radius: 5px;
+      background: var(--cp-accent-soft); color: var(--cp-accent); font-size: .78rem;
+    }
+    .diagram-steps > li:last-child strong {
+      background: var(--cp-surface-soft); color: var(--cp-success); border: 1px solid var(--cp-success);
+    }
+    .trouble-case + .trouble-case { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--cp-border); }
+    ol.steps { counter-reset: st; list-style: none; padding-left: 0; display: grid; gap: 10px; }
+    ol.steps > li {
+      position: relative; margin: 0; padding: 12px 14px 12px 44px;
+      background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: .625rem;
+    }
+    ol.steps > li::before {
+      counter-increment: st; content: counter(st);
+      position: absolute; left: 12px; top: 13px; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--cp-accent); color: var(--cp-accent-fg); font-size: .76rem; font-weight: 750;
+      display: grid; place-items: center;
+    }
+    .stats { font-size: 1.45rem; line-height: 1.25; font-weight: 750; font-variant-numeric: tabular-nums; margin: 4px 0 8px; }
+    .check-status {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      margin-bottom: 10px; font-size: .88rem; color: var(--cp-text-muted);
+    }
     .checks { display: grid; gap: 8px; }
-    .checks label { display: flex; align-items: start; gap: 8px; }
-    .checks input { accent-color: var(--cp-accent); margin-block-start: .45em; flex: 0 0 auto; }
+    .checks label {
+      display: flex; align-items: start; gap: 10px; padding: 10px 13px;
+      background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: .625rem; cursor: pointer;
+    }
+    .checks label.is-checked { border-color: var(--cp-success); background: var(--cp-surface-soft); }
+    .checks input { accent-color: var(--cp-accent); margin-block-start: .32em; width: 16px; height: 16px; flex: 0 0 auto; }
     .refs { color: var(--cp-text-muted); font-size: .9rem; }
-    code { font-family: Consolas, "Courier New", Courier, monospace; }
-    footer { padding: 4px 8px 20px; font-size: .86rem; color: var(--cp-text-muted); }
-    html[data-theme="dark"] :is(header .refs, .panel .label, .flow .label, footer) { color: var(--cp-text); }
-    @media (max-width: 980px) {
-      .layout { display: block; }
-      nav { position: static; max-height: none; padding: 16px; }
-      .nav-links { display: flex; flex-wrap: wrap; gap: 4px; }
-      main { padding: 0 16px 32px; }
+    code {
+      font-family: Consolas, "Courier New", Courier, monospace;
+      background: var(--cp-surface-soft); border: 1px solid var(--cp-border);
+      padding: 1px 5px; border-radius: 5px; font-size: .9em;
+    }
+    footer { padding: 4px 8px 20px; font-size: .86rem; color: var(--cp-text-muted); text-align: center; }
+    html[data-theme="dark"] :is(header .refs, .panel .label, .flow .label, footer, .visual-hint) { color: var(--cp-text-soft); }
+    @media (max-width: 1040px) {
+      .layout { display: block; padding: 14px 14px 36px; }
+      nav { position: static; max-height: none; margin-bottom: 16px; }
+      .nav-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 8px; }
+      .nav-group { grid-column: 1 / -1; }
+      .quick-jump { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media screen and (max-width: 720px) {
-      .diagram-steps { grid-template-columns: 1fr; gap: 20px; }
+      .diagram-steps { grid-template-columns: 1fr; gap: 18px; }
       .diagram-steps > li:not(:last-child)::after {
-        inset: auto auto -13px calc(50% - 4px); transform: rotate(135deg);
+        content: "↓"; top: auto; right: auto; bottom: -15px; left: 18px; transform: none;
       }
     }
     @media screen and (max-width: 600px) {
-      .grid, .flow { grid-template-columns: 1fr; }
+      .nav-links, .quick-jump, .grid, .flow { grid-template-columns: 1fr; }
+      .situation { flex-direction: column; gap: 6px; }
       .responsive thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
       .responsive tbody, .responsive tr, .responsive th, .responsive td { display: block; width: 100%; }
       .responsive tbody tr { margin: 0 0 12px; border: 1px solid var(--cp-border); border-radius: .625rem; }
@@ -166,15 +299,17 @@
     }
     @media print {
       @page { margin: 14mm; }
-      nav, .skip { display: none; }
-      .layout { display: block; }
+      nav, .skip, .quick-jump, .visual-hint { display: none; }
+      .layout { display: block; padding: 0; }
       body { background: var(--cp-surface); font-size: 10pt; }
       main { padding: 0; }
-      header, section { padding: 0 0 12pt; margin: 0 0 12pt; border: 0; background: var(--cp-surface); }
-      header, .panel, .flow li, .situation, .callout, tr { break-inside: avoid; }
+      header, section { padding: 0 0 12pt; margin: 0 0 12pt; border: 0; box-shadow: none; background: var(--cp-surface); }
+      .visual-scroll { overflow: visible; padding: 8px 0; }
+      .visual-scroll svg.wide-svg { min-width: 0; }
+      header, .panel, .flow li, .situation, .callout, .visual-box, .case-diagram, tr { break-inside: avoid; }
       h2, h3, h4 { break-after: avoid; }
-      h1 { font-size: 25pt; }
-      h2 { font-size: 15pt; }
+      h1 { font-size: 22pt; }
+      h2 { font-size: 14pt; }
     }
   </style>
 </head>
@@ -182,23 +317,147 @@
   <a class="skip" href="#main">본문으로 건너뛰기</a>
   <div class="layout">
     <nav aria-label="목차">
-      <p>Copilot 예산 운영</p>
+      <div class="nav-head">
+        <p class="nav-brand">Copilot 예산 가이드</p>
+        <div class="nav-tools">
+          <button type="button" class="tool-btn" id="theme-toggle" aria-label="테마 전환">테마</button>
+          <button type="button" class="tool-btn" id="print-btn" aria-label="인쇄 또는 PDF 저장">인쇄</button>
+        </div>
+      </div>
       <div class="nav-links">
-        <a href="#case-diagrams">상황별 설정 흐름도</a>
-        <a href="#copilot-only">Copilot만 사용</a>
-        <a href="#individual">특정 사용자 한도 조정</a>
-        <a href="#department">부서별 한도와 포함량</a>
-        <a href="#other-plans">플랜·조직에 따른 차이</a>
-        <a href="#checklist">배포 전 체크리스트</a>
-        <a href="#sources">공식 문서</a>
-        <a href="#diagnostics">트러블슈팅</a>
+        <span class="nav-group">개요 · 전체 흐름</span>
+        <a href="#case-diagrams"><span class="nav-num">00</span><span>상황별 설정 흐름도</span></a>
+        <span class="nav-group">상황별 설정 절차</span>
+        <a href="#copilot-only"><span class="nav-num">01</span><span>Copilot만 단독 사용</span></a>
+        <a href="#individual"><span class="nav-num">02</span><span>특정 사용자 한도 조정</span></a>
+        <a href="#department"><span class="nav-num">03</span><span>부서별 한도와 포함량</span></a>
+        <a href="#other-plans"><span class="nav-num">04</span><span>플랜·조직에 따른 차이</span></a>
+        <span class="nav-group">운영 기준 · 출처</span>
+        <a href="#checklist"><span class="nav-num">05</span><span>배포 전 체크리스트</span></a>
+        <a href="#sources"><span class="nav-num">06</span><span>공식 문서 (22건)</span></a>
+        <span class="nav-group">진단 · 문제 해결</span>
+        <a href="#diagnostics"><span class="nav-num">TS</span><span>트러블슈팅</span></a>
       </div>
     </nav>
     <main id="main">
       <header>
         <span class="eyebrow">2026년 11월 18일 기준 · 관리자 운영 가이드</span>
-        <h1>GitHub Copilot<br>상황별 사용자 예산 설정</h1>
-        <p class="lead">저장소 없이 Copilot만 쓰는 환경부터, 개인 증액과 부서별 비용 관리까지 필요한 상황에 맞는 방법을 선택하세요. <strong>사용자별 총 소비 한도</strong>와 <strong>유료 지출 한도</strong>는 별도로 설정합니다.</p>
+        <h1>GitHub Copilot 상황별 사용자 예산 설정</h1>
+        <p class="lead">저장소 없이 Copilot만 쓰는 환경부터, 개인 증액과 부서별 비용 관리까지 필요한 상황에 맞는 방법을 선택하세요. <strong>사용자별 총 소비 한도(Users)</strong>와 <strong>유료 지출 한도(Cost center · Org · Enterprise)</strong>는 역할이 다르므로 별도로 설정합니다.</p>
+
+        <div class="quick-jump" aria-label="상황별 바로가기">
+          <a class="jump-card" href="#copilot-only">
+            <span class="j-step">우선 적용 · 01</span>
+            <strong>Copilot만 단독 운영</strong>
+            <span>Organization 없이 직접 할당·기본 한도 설정</span>
+          </a>
+          <a class="jump-card" href="#individual">
+            <span class="j-step">개인 예외 · 02</span>
+            <strong>특정 1명 한도 증액</strong>
+            <span>추가분이 아닌 새 월 총한도($) 입력</span>
+          </a>
+          <a class="jump-card" href="#department">
+            <span class="j-step">부서 통제 · 03</span>
+            <strong>부서별 3중 한도 분리</strong>
+            <span>1인 한도·포함량 상한·팀 유료 지출</span>
+          </a>
+          <a class="jump-card" href="#other-plans">
+            <span class="j-step">플랜 비교 · 04</span>
+            <strong>저장소 병행·신규 모델</strong>
+            <span>Enterprise·Copilot access 과금 시점</span>
+          </a>
+          <a class="jump-card" href="#diagnostics">
+            <span class="j-step">문제 해결 · TS</span>
+            <strong>차단·수치 불일치 진단</strong>
+            <span>7가지 증상별 점검 화면과 원인 분리</span>
+          </a>
+        </div>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">핵심 구조도</span>AI 크레딧 요청의 3단계 통제 게이트와 무료 기능 분리</span>
+            <span class="visual-hint">모바일에서는 좌우로 밀어 전체 도식을 확인하세요</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 316" role="img" aria-labelledby="svg-gates-title svg-gates-desc">
+              <title id="svg-gates-title">AI 크레딧 요청 3단계 통제 게이트 구조도</title>
+              <desc id="svg-gates-desc">인라인 코드 완성과 NES는 AI 크레딧을 쓰지 않아 상단 경로로 상시 작동하며, 채팅·CLI·클라우드 에이전트 요청은 1단계 사용자별 한도, 2단계 공유 포함 풀 및 부서 포함량 상한, 3단계 유료 사용 정책 및 지출 상한을 모두 통과해야 실행됩니다.</desc>
+              <defs>
+                <marker id="arr-main" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--cp-accent)"/>
+                </marker>
+                <marker id="arr-ok" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--cp-success)"/>
+                </marker>
+                <marker id="arr-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 1 L 9 5 L 0 9 z" fill="var(--cp-border-strong)"/>
+                </marker>
+              </defs>
+
+              <!-- Free bypass lane -->
+              <rect x="16" y="14" width="176" height="58" rx="10" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="104" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="var(--cp-text)">사용자 기능 실행</text>
+              <text x="104" y="56" text-anchor="middle" font-size="11.5" fill="var(--cp-text-muted)">유효한 Copilot 좌석 보유</text>
+
+              <line x1="192" y1="38" x2="230" y2="38" stroke="var(--cp-success)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arr-ok)"/>
+              <rect x="236" y="14" width="708" height="48" rx="10" fill="var(--cp-bg-elevated)" stroke="var(--cp-success)" stroke-width="1.5" stroke-dasharray="6 3"/>
+              <text x="256" y="36" font-size="12.5" font-weight="700" fill="var(--cp-success)">인라인 코드 완성 · Next Edit Suggestions (AI 크레딧 미소비)</text>
+              <text x="256" y="53" font-size="11.5" fill="var(--cp-text-muted)">사용자 한도($0 포함)나 공유 크레딧 풀 소진 여부와 무관하게 좌석이 있으면 계속 동작</text>
+
+              <!-- Credit request connector -->
+              <path d="M 114 72 L 114 166 L 140 166" fill="none" stroke="var(--cp-accent)" stroke-width="2" marker-end="url(#arr-main)"/>
+              <text x="104" y="120" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--cp-accent)">크레딧 소비</text>
+              <text x="104" y="137" text-anchor="end" font-size="10.5" fill="var(--cp-text-muted)">Chat · CLI · Agent</text>
+              <text x="104" y="153" text-anchor="end" font-size="10.5" fill="var(--cp-text-muted)">1 cr = US$0.01</text>
+
+              <!-- Gate 1 -->
+              <rect x="146" y="88" width="236" height="156" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <rect x="160" y="100" width="94" height="22" rx="6" fill="var(--cp-accent)"/>
+              <text x="207" y="115" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-accent-fg)">게이트 1 · 개인</text>
+              <text x="160" y="143" font-size="13.5" font-weight="700" fill="var(--cp-text)">사용자별 한도 (Scope: Users)</text>
+              <text x="160" y="164" font-size="12" fill="var(--cp-text)">우선순위: 개인 &gt; 부서 기본 &gt; 전사</text>
+              <text x="160" y="183" font-size="11.5" fill="var(--cp-text-muted)">• 가장 구체적인 한도 1개만 대체 적용</text>
+              <text x="160" y="201" font-size="11.5" fill="var(--cp-text-muted)">• 무료 포함분 + 유료분 전체 소비량 합산</text>
+              <text x="160" y="222" font-size="11.5" font-weight="700" fill="var(--cp-danger)">• 도달 시 항상 차단 (공유 풀 남아도 중단)</text>
+
+              <line x1="382" y1="166" x2="412" y2="166" stroke="var(--cp-accent)" stroke-width="2" marker-end="url(#arr-main)"/>
+
+              <!-- Gate 2 -->
+              <rect x="418" y="88" width="248" height="156" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <rect x="432" y="100" width="98" height="22" rx="6" fill="var(--cp-bg-elevated)" stroke="var(--cp-border-strong)" stroke-width="1"/>
+              <text x="481" y="115" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-text)">게이트 2 · 포함분</text>
+              <text x="432" y="143" font-size="13.5" font-weight="700" fill="var(--cp-text)">공유 포함 풀 &amp; 부서 포함 상한</text>
+              <text x="432" y="164" font-size="12" fill="var(--cp-text)">Business 1,900 · Enterprise 3,900/석</text>
+              <text x="432" y="183" font-size="11.5" fill="var(--cp-text-muted)">• 개인 전용 지갑이 아닌 전사 공유 풀</text>
+              <text x="432" y="201" font-size="11.5" fill="var(--cp-text-muted)">• 부서 Included 상한 설정 시 먼저 확인</text>
+              <text x="432" y="222" font-size="11.5" font-weight="700" fill="var(--cp-success)">• 잔량 있으면 추가 과금($0) 없이 차감</text>
+
+              <line x1="666" y1="166" x2="698" y2="166" stroke="var(--cp-accent)" stroke-width="2" marker-end="url(#arr-main)"/>
+              <text x="682" y="154" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--cp-text-muted)">소진 시</text>
+
+              <!-- Gate 3 -->
+              <rect x="704" y="88" width="240" height="156" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <rect x="718" y="100" width="98" height="22" rx="6" fill="var(--cp-bg-elevated)" stroke="var(--cp-border-strong)" stroke-width="1"/>
+              <text x="767" y="115" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-text)">게이트 3 · 유료분</text>
+              <text x="718" y="143" font-size="13.5" font-weight="700" fill="var(--cp-text)">유료 정책 &amp; 지출 예산 상한</text>
+              <text x="718" y="164" font-size="12" fill="var(--cp-text)">AI credits paid usage = Enabled</text>
+              <text x="718" y="183" font-size="11.5" fill="var(--cp-text-muted)">• 부서·조직·전사 지출 예산 각각 적용</text>
+              <text x="718" y="201" font-size="11.5" fill="var(--cp-text-muted)">• Copilot access는 1크레딧부터 이 단계</text>
+              <text x="718" y="222" font-size="11.5" font-weight="700" fill="var(--cp-warning)">• Stop usage 켜야 한도 도달 시 차단</text>
+
+              <!-- Bottom summary strip -->
+              <rect x="138" y="258" width="806" height="44" rx="8" fill="var(--cp-bg-elevated)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="156" y="285" font-size="12" fill="var(--cp-text)">
+                <tspan font-weight="700" fill="var(--cp-accent)">핵심 원칙:</tspan>
+                <tspan>적용되는 모든 통제 조건 중 </tspan>
+                <tspan font-weight="700">가장 먼저 남은 여유가 0이 되는 한도</tspan>
+                <tspan>에서 크레딧 소비 기능이 멈춥니다 (저가 모델 자동 전환 없음).</tspan>
+              </text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">설명 순서는 이해를 돕기 위한 흐름이며, 실제로는 사용자별 총 소비 한도(Users)와 유료 지출 한도·정책이 각각 독립 조건으로 함께 충족되어야 합니다.</figcaption>
+        </figure>
+
         <ol class="flow" aria-label="AI 크레딧 사용 시 확인 순서">
           <li><span class="label">1. 사용자 한도</span><strong>개인 → 부서 기본 → 전사 기본</strong>가장 구체적인 한도 하나가 적용됩니다. 포함 크레딧을 쓴 양도 합산합니다.</li>
           <li><span class="label">2. 포함 크레딧</span><strong>Business·Enterprise 공유 풀</strong>개인에게 별도 지급하지 않습니다. 부서별 포함량 제한을 적용한 경우 그 상한도 확인합니다.</li>
@@ -208,6 +467,7 @@
       </header>
 
       <section id="case-diagrams" aria-labelledby="case-diagrams-title">
+        <div class="sec-kicker"><span class="sec-tag neutral">00 · 요약 흐름도</span></div>
         <h2 id="case-diagrams-title">상황별 설정 흐름도</h2>
         <p>좌석은 Copilot을 쓸 권한입니다. 크레딧은 채팅 등 일부 기능의 사용량을 세는 단위입니다. 어떤 권한과 한도가 필요한지 먼저 확인한 뒤, 해당 설정 절차를 보세요.</p>
 
@@ -263,9 +523,68 @@
       </section>
 
       <section id="copilot-only">
-        <span class="eyebrow">우선 적용</span>
+        <div class="sec-kicker"><span class="sec-tag">01 · 우선 적용</span><span class="label">저장소 미운영 환경</span></div>
         <h2>저장소 없이 Copilot Business만 사용</h2>
         <p class="situation"><strong>상황</strong><span>IDE에서 Copilot만 사용하고, 저장소나 Organization은 운영할 필요가 없습니다.</span></p>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">구성 대조도</span>Enterprise 직접 할당(권장) vs 불필요한 Organization 소속 시 과금 차이</span>
+            <span class="visual-hint">좌석 배정 경로에 따른 라이선스 소비 비교</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 286" role="img" aria-labelledby="svg-direct-title svg-direct-desc">
+              <title id="svg-direct-title">Enterprise 직접 할당과 Organization 소속 시 라이선스 과금 비교도</title>
+              <desc id="svg-direct-desc">저장소 없이 Copilot만 쓸 때 Enterprise에서 직접 좌석을 할당하면 Copilot Business 좌석료만 발생하지만, 사용자를 GHEC Organization에 소속시키면 저장소가 없어도 Enterprise Cloud 라이선스를 추가로 소비할 수 있음을 보여줍니다.</desc>
+
+              <!-- Left: Recommended Direct Assignment -->
+              <rect x="16" y="14" width="452" height="256" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-success)" stroke-width="2"/>
+              <rect x="32" y="28" width="214" height="24" rx="6" fill="var(--cp-bg-elevated)" stroke="var(--cp-success)" stroke-width="1.2"/>
+              <text x="139" y="44" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-success)">권장 구성 · Copilot 단독 운영</text>
+
+              <rect x="32" y="66" width="184" height="62" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.2"/>
+              <text x="124" y="91" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-text)">IdP 계정 연동 유지</text>
+              <text x="124" y="111" text-anchor="middle" font-size="11" fill="var(--cp-text-muted)">Entra ID · Okta (SSO·SCIM)</text>
+
+              <line x1="216" y1="97" x2="250" y2="97" stroke="var(--cp-success)" stroke-width="2" marker-end="url(#arr-ok)"/>
+
+              <rect x="256" y="66" width="196" height="62" rx="8" fill="var(--cp-surface)" stroke="var(--cp-success)" stroke-width="1.5"/>
+              <text x="354" y="91" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-text)">Enterprise 직접 할당</text>
+              <text x="354" y="111" text-anchor="middle" font-size="11" fill="var(--cp-text-muted)">Organization 미생성·미소속</text>
+
+              <rect x="32" y="144" width="420" height="54" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="48" y="166" font-size="12" font-weight="700" fill="var(--cp-text)">선행 통제 설정 (Enterprise 설정)</text>
+              <text x="48" y="185" font-size="11.5" fill="var(--cp-text-muted)">Policies for enterprise-assigned users + 전사 기본 한도(Users) + 유료 정책</text>
+
+              <rect x="32" y="210" width="420" height="44" rx="8" fill="var(--cp-bg-elevated)" stroke="var(--cp-success)" stroke-width="1.2"/>
+              <text x="48" y="237" font-size="12.5" font-weight="700" fill="var(--cp-success)">과금 결과: Copilot Business 좌석($19/인·월)만 소비 · GHEC 좌석 0석</text>
+
+              <!-- Right: Unintended Org Seat Consumption -->
+              <rect x="492" y="14" width="452" height="256" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-warning)" stroke-width="1.8" stroke-dasharray="6 3"/>
+              <rect x="508" y="28" width="236" height="24" rx="6" fill="var(--cp-bg-elevated)" stroke="var(--cp-warning)" stroke-width="1.2"/>
+              <text x="626" y="44" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-warning)">주의 · 불필요한 Organization 소속</text>
+
+              <rect x="508" y="66" width="184" height="62" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.2"/>
+              <text x="600" y="91" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-text)">동일 사용자 계정</text>
+              <text x="600" y="111" text-anchor="middle" font-size="11" fill="var(--cp-text-muted)">저장소 코드 작업 없음</text>
+
+              <line x1="692" y1="97" x2="726" y2="97" stroke="var(--cp-border-strong)" stroke-width="2" marker-end="url(#arr-muted)"/>
+
+              <rect x="732" y="66" width="196" height="62" rx="8" fill="var(--cp-surface)" stroke="var(--cp-danger)" stroke-width="1.5"/>
+              <text x="830" y="91" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-text)">GHEC Organization 멤버</text>
+              <text x="830" y="111" text-anchor="middle" font-size="11" fill="var(--cp-danger)">저장소가 0개여도 좌석 점유</text>
+
+              <rect x="508" y="144" width="420" height="54" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="524" y="166" font-size="12" font-weight="700" fill="var(--cp-text)">흔한 오해</text>
+              <text x="524" y="185" font-size="11.5" fill="var(--cp-text-muted)">AI 크레딧 예산을 낮춰도 이미 점유한 Enterprise Cloud 좌석료는 줄어들지 않음</text>
+
+              <rect x="508" y="210" width="420" height="44" rx="8" fill="var(--cp-bg-elevated)" stroke="var(--cp-danger)" stroke-width="1.2"/>
+              <text x="524" y="237" font-size="12.5" font-weight="700" fill="var(--cp-danger)">과금 결과: Copilot Business 외 Enterprise Cloud 라이선스 추가 소비</text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">저장소가 필요 없는 환경에서는 새 Organization을 만들지 않고 Enterprise의 All members 또는 Enterprise Teams에서 직접 좌석을 부여합니다.</figcaption>
+        </figure>
+
         <h3 class="method">설정 방법: Enterprise 직접 할당과 기본 한도</h3>
         <p>좌석은 Enterprise Owner가 할당하고, 예산은 Enterprise Owner 또는 Billing Manager가 관리할 수 있습니다. 이미 회사 관리형 계정(EMU)을 쓴다면 Okta나 Entra ID 같은 신원 공급자(IdP)의 앱 할당과 로그인·계정 연동(SSO·SCIM)은 그대로 유지합니다.</p>
         <ol class="steps">
@@ -293,8 +612,79 @@
       </section>
 
       <section id="individual">
+        <div class="sec-kicker"><span class="sec-tag">02 · 개인 예외</span><span class="label">단일 사용자 한도 변경</span></div>
         <h2>특정 사용자만 월 사용 한도 조정</h2>
         <p class="situation"><strong>상황</strong><span>전사나 부서 기본값은 유지하고, 특정 사용자 한 명만 더 쓰게 하거나 한도를 낮추려는 경우입니다.</span></p>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">우선순위·산정 도식</span>사용자별 한도(Users) 대체 규칙과 월 총액($39) 입력 방식</span>
+            <span class="visual-hint">가상 예시 수치 기준 · 합산되지 않고 상위 1개만 적용</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 282" role="img" aria-labelledby="svg-ulb-title svg-ulb-desc">
+              <title id="svg-ulb-title">사용자별 예산 우선순위 대체 규칙 및 월 총한도 입력 도식</title>
+              <desc id="svg-ulb-desc">특정 개인 예산이 있으면 부서 기본과 전사 기본 한도를 합산하지 않고 대체하며, 만료 시 하위 기본 한도로 복귀합니다. 또한 $19 한도 사용자에게 $20를 더 허용하려면 추가분 $20가 아닌 새 월 총한도 $39를 입력합니다.</desc>
+
+              <!-- Left: Priority Override Stack -->
+              <rect x="16" y="14" width="444" height="254" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border)" stroke-width="1.5"/>
+              <text x="34" y="40" font-size="13" font-weight="700" fill="var(--cp-text)">1. 적용 우선순위 (합산 아님 · 대체 적용)</text>
+
+              <!-- Tier 1: Active Individual -->
+              <rect x="34" y="56" width="306" height="54" rx="9" fill="var(--cp-accent-soft)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <rect x="46" y="68" width="64" height="22" rx="5" fill="var(--cp-accent)"/>
+              <text x="78" y="83" text-anchor="middle" font-size="11" font-weight="700" fill="var(--cp-accent-fg)">1순위 적용</text>
+              <text x="120" y="81" font-size="12.5" font-weight="700" fill="var(--cp-text)">특정 개인 지정 ($39)</text>
+              <text x="120" y="99" font-size="11" fill="var(--cp-text-muted)">Users → GitHub 사용자 선택</text>
+
+              <!-- Tier 2: Cost Center ULB -->
+              <rect x="34" y="122" width="306" height="50" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.2" stroke-dasharray="5 3"/>
+              <text x="48" y="144" font-size="12" font-weight="700" fill="var(--cp-text-muted)">2순위 대기 · 부서 1인 한도 ($30)</text>
+              <text x="48" y="161" font-size="11" fill="var(--cp-text-muted)">개인 예외 없을 때 적용 (Users → Cost Center)</text>
+
+              <!-- Tier 3: Universal ULB -->
+              <rect x="34" y="184" width="306" height="50" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1.2" stroke-dasharray="5 3"/>
+              <text x="48" y="206" font-size="12" font-weight="700" fill="var(--cp-text-muted)">3순위 대기 · 전사 기본 한도 ($19)</text>
+              <text x="48" y="223" font-size="11" fill="var(--cp-text-muted)">개인·부서 한도 없을 때 적용 (선택란 비움)</text>
+
+              <!-- Expiration Fallback Arrow -->
+              <path d="M 340 83 L 392 83 L 392 147 L 346 147" fill="none" stroke="var(--cp-accent)" stroke-width="1.8" marker-end="url(#arr-main)"/>
+              <text x="398" y="108" font-size="10.5" font-weight="700" fill="var(--cp-accent)">만료일</text>
+              <text x="398" y="123" font-size="10.5" fill="var(--cp-text-muted)">도래 시</text>
+              <text x="398" y="138" font-size="10.5" fill="var(--cp-text-muted)">자동 복귀</text>
+
+              <text x="34" y="254" font-size="11" fill="var(--cp-text-muted)">※ 주의: 기존 고액 개인 예산을 삭제하면 즉시 하위 한도로 내려가 차단될 수 있음</text>
+
+              <!-- Right: Total Monthly Cap Input Bar -->
+              <rect x="476" y="14" width="468" height="254" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border)" stroke-width="1.5"/>
+              <text x="494" y="40" font-size="13" font-weight="700" fill="var(--cp-text)">2. 입력 금액 계산 예시 ($19 기본에서 +$20 증액 시)</text>
+
+              <text x="494" y="68" font-size="11.5" fill="var(--cp-text-muted)">누적 소비량 = 포함 풀에서 쓴 크레딧 + 유료 크레딧 합계</text>
+
+              <!-- Proportional Bar: Total 432px = $39 -> 210px ($19) + 222px (+$20) -->
+              <rect x="494" y="84" width="210" height="52" rx="8" fill="var(--cp-bg-elevated)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="599" y="107" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-text)">기존 기본 구간 $19</text>
+              <text x="599" y="125" text-anchor="middle" font-size="11" fill="var(--cp-text-muted)">1,900 credits</text>
+
+              <rect x="706" y="84" width="220" height="52" rx="8" fill="var(--cp-accent-soft)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <text x="816" y="107" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--cp-accent)">추가 허용 구간 +$20</text>
+              <text x="816" y="125" text-anchor="middle" font-size="11" fill="var(--cp-text)">+2,000 credits 여유</text>
+
+              <!-- Bracket / Total Input Callout -->
+              <path d="M 494 146 L 494 156 L 926 156 L 926 146" fill="none" stroke="var(--cp-accent)" stroke-width="1.8"/>
+              <line x1="710" y1="156" x2="710" y2="168" stroke="var(--cp-accent)" stroke-width="1.8"/>
+
+              <rect x="530" y="170" width="360" height="44" rx="8" fill="var(--cp-accent)"/>
+              <text x="710" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="var(--cp-accent-fg)">개별 예산 입력값 = $39 (총 3,900 credits 상한)</text>
+              <text x="710" y="206" text-anchor="middle" font-size="11" fill="var(--cp-accent-fg)">추가분($20)만 입력하거나 $19+$39($58)로 합산되지 않음</text>
+
+              <text x="494" y="242" font-size="11.5" fill="var(--cp-text)">• 전사 공유 풀이 충분하면 $39 이내 사용분도 추가 청구 없이 차감 가능</text>
+              <text x="494" y="258" font-size="11.5" fill="var(--cp-text-muted)">• 공유 풀 소진 후에는 유료 사용 정책(Enabled)과 지출 예산 여유도 함께 필요</text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">기존 개별 예산이 있는 사용자는 새로 중복 생성하지 않고 해당 예산 우측 메뉴(… → Edit)에서 월 총액을 변경합니다.</figcaption>
+        </figure>
+
         <h3 class="method">설정 방법: 개별 예산 생성 또는 수정</h3>
         <p>기존 개인 예산이 있으면 <strong>Budgets and alerts → 해당 항목의 … → Edit</strong>에서 수정합니다. 없으면 아래 경로로 만들고, 추가분이 아닌 <strong>월 총 사용 한도</strong>를 입력합니다.</p>
         <div class="route">Billing and licensing → Budgets and alerts → New budget → Bundled AI credits budget → Budget scope: Users → 대상 사용자 → Create budget</div>
@@ -317,8 +707,85 @@
       </section>
 
       <section id="department">
+        <div class="sec-kicker"><span class="sec-tag">03 · 부서 통제</span><span class="label">Cost Center 설계</span></div>
         <h2>부서별 1인 한도와 총지출 관리</h2>
         <p class="situation"><strong>상황</strong><span>부서마다 1인당 사용 한도를 다르게 주고, 부서 전체의 유료 지출이나 포함 크레딧 사용량도 따로 제한하려는 경우입니다.</span></p>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">3중 통제 구조도</span>Cost Center에 연결되는 3가지 한도와 전사 예산의 관계</span>
+            <span class="visual-hint">Cost Center 생성만으로는 자동 차단되지 않으며 필요한 통제를 선택해 연결</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 326" role="img" aria-labelledby="svg-cc-title svg-cc-desc">
+              <title id="svg-cc-title">부서 Cost Center 3중 통제 아키텍처 도식</title>
+              <desc id="svg-cc-desc">사용자와 Enterprise Team을 부서 Cost Center에 귀속한 뒤, 1인당 총 소비 한도, 부서 포함 사용량 상한, 부서 유료 지출 상한 세 가지를 목적에 따라 각각 설정하고 전사 유료 지출 예산과의 포함·제외 관계를 검증하는 구조도입니다.</desc>
+
+              <!-- Left: Resource Assignment -->
+              <rect x="16" y="34" width="212" height="258" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="32" y="60" font-size="13" font-weight="700" fill="var(--cp-text)">대상 귀속 (Resources)</text>
+
+              <rect x="30" y="76" width="184" height="62" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="42" y="99" font-size="12" font-weight="700" fill="var(--cp-text)">Organization 소속 사용자</text>
+              <text x="42" y="118" font-size="11" fill="var(--cp-text-muted)">UI에서 직접 사용자 추가 가능</text>
+
+              <rect x="30" y="150" width="184" height="78" rx="8" fill="var(--cp-surface)" stroke="var(--cp-accent)" stroke-width="1.4"/>
+              <text x="42" y="172" font-size="12" font-weight="700" fill="var(--cp-accent)">Copilot 단독 (Org 미소속)</text>
+              <text x="42" y="191" font-size="11" fill="var(--cp-text)">• UI: Enterprise Team으로 연결</text>
+              <text x="42" y="209" font-size="11" fill="var(--cp-text-muted)">• 직접 등록: Cost Center API</text>
+
+              <text x="32" y="254" font-size="11" fill="var(--cp-text-muted)">직접 귀속 &gt; 팀 귀속 우선</text>
+              <text x="32" y="272" font-size="11" fill="var(--cp-text-muted)">(좌석 부여와는 별도 절차)</text>
+
+              <line x1="228" y1="163" x2="262" y2="163" stroke="var(--cp-accent)" stroke-width="2" marker-end="url(#arr-main)"/>
+
+              <!-- Center: Cost Center 3 Controls -->
+              <rect x="268" y="14" width="424" height="298" rx="14" fill="var(--cp-bg-elevated)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <rect x="286" y="26" width="144" height="24" rx="6" fill="var(--cp-accent)"/>
+              <text x="358" y="42" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-accent-fg)">부서 Cost Center</text>
+              <text x="442" y="43" font-size="11.5" fill="var(--cp-text-muted)">목적에 맞는 통제 항목을 각각 설정</text>
+
+              <!-- Control 1 -->
+              <rect x="286" y="62" width="388" height="72" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.3"/>
+              <text x="302" y="84" font-size="12.5" font-weight="700" fill="var(--cp-text)">① 부서원 1인당 월 소비 한도 (개인별 상한)</text>
+              <text x="302" y="103" font-size="11.5" fill="var(--cp-accent)">경로: New budget → Scope: Users → 해당 Cost Center</text>
+              <text x="302" y="121" font-size="11" fill="var(--cp-text-muted)">예: $40 설정 시 부서 합산이 아닌 구성원 각자 4,000 cr 상한 (항상 차단)</text>
+
+              <!-- Control 2 -->
+              <rect x="286" y="144" width="388" height="72" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.3"/>
+              <text x="302" y="166" font-size="12.5" font-weight="700" fill="var(--cp-text)">② 부서 포함 크레딧 사용 상한 (공유 풀 분리 시만)</text>
+              <text x="302" y="185" font-size="11.5" fill="var(--cp-text)">경로: Cost centers → … → Edit → Included usage controls</text>
+              <text x="302" y="203" font-size="11" fill="var(--cp-text-muted)">귀속 좌석 기준 상한 자동 계산 · 도달 시 [차단] 또는 [유료 전환] 선택</text>
+
+              <!-- Control 3 -->
+              <rect x="286" y="226" width="388" height="72" rx="9" fill="var(--cp-surface)" stroke="var(--cp-accent)" stroke-width="1.6"/>
+              <text x="302" y="248" font-size="12.5" font-weight="700" fill="var(--cp-text)">③ 부서 전체 유료 지출 상한 (팀 초과 과금 캡)</text>
+              <text x="302" y="267" font-size="11.5" fill="var(--cp-accent)">경로: New budget → Scope: Cost center + Stop usage 켜기</text>
+              <text x="302" y="285" font-size="11" fill="var(--cp-text-muted)">예: 부서 합산 유료 지출 $100 도달 시 중단 · 비허용 부서는 $0 + Stop</text>
+
+              <line x1="692" y1="262" x2="726" y2="262" stroke="var(--cp-accent)" stroke-width="2" marker-end="url(#arr-main)"/>
+
+              <!-- Right: Enterprise Budget Interaction -->
+              <rect x="732" y="34" width="212" height="258" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="748" y="60" font-size="13" font-weight="700" fill="var(--cp-text)">전사 지출 예산 연동</text>
+              <text x="748" y="79" font-size="11" fill="var(--cp-text-muted)">Scope: Enterprise</text>
+
+              <rect x="746" y="94" width="184" height="82" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="758" y="115" font-size="12" font-weight="700" fill="var(--cp-text)">기본 동작 (권장)</text>
+              <text x="758" y="134" font-size="11" fill="var(--cp-text-muted)">부서 지출도 전사 한도에</text>
+              <text x="758" y="150" font-size="11" fill="var(--cp-text-muted)">함께 반영 (전사 $0이면</text>
+              <text x="758" y="166" font-size="11" fill="var(--cp-danger)">부서 유료 허용도 차단됨)</text>
+
+              <rect x="746" y="188" width="184" height="88" rx="8" fill="var(--cp-surface)" stroke="var(--cp-warning)" stroke-width="1.3"/>
+              <text x="758" y="209" font-size="12" font-weight="700" fill="var(--cp-warning)">Exclude 옵션 켤 때</text>
+              <text x="758" y="228" font-size="11" fill="var(--cp-text-muted)">전사 한도에서 CC 지출이</text>
+              <text x="758" y="244" font-size="11" fill="var(--cp-text-muted)">빠지므로 모든 CC에 개별</text>
+              <text x="758" y="260" font-size="11" font-weight="700" fill="var(--cp-text)">지출 상한($0 포함) 필수</text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">개인별 한도(①)만 높여서는 특정 부서에만 유료 사용을 열어줄 수 없으므로, 부서별 유료 지출 한도(③)와 전사 한도 연동 여부를 함께 설계합니다.</figcaption>
+        </figure>
+
         <h3 class="method">설정 방법: Cost Center에 필요한 한도만 추가</h3>
         <p>Cost Center는 사용량과 지출을 부서·프로젝트에 귀속시키는 단위입니다. <strong>Cost Center를 만드는 것만으로 비용이 제한되지는 않습니다.</strong> 한 팀의 1인당 상한, 팀 유료 지출, 팀의 공유 풀 사용 상한을 각각 결정합니다.</p>
         <ol class="steps">
@@ -333,8 +800,70 @@
       </section>
 
       <section id="other-plans">
+        <div class="sec-kicker"><span class="sec-tag">04 · 플랜·조직 비교</span><span class="label">과금 시작점과 예산 산정</span></div>
         <h2>저장소 운영·Copilot access 전환 시 설정 차이</h2>
         <p class="situation"><strong>상황</strong><span>GHEC 저장소와 Organization도 운영하거나, Business에서 Copilot Enterprise 또는 Copilot access로 바꾸는 방안을 검토합니다.</span></p>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">플랜·산정 비교도</span>플랜별 유료 과금 시작 시점과 20석 가상 예산 안전망 구조</span>
+            <span class="visual-hint">포함 크레딧 유무와 전사 지출 상한(Stop) 작동 구간</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 312" role="img" aria-labelledby="svg-plans-title svg-plans-desc">
+              <title id="svg-plans-title">플랜별 과금 시작 시점 비교 및 20석 가상 예산 산정 도식</title>
+              <desc id="svg-plans-desc">Copilot Business와 Enterprise는 좌석당 공유 포함 풀을 먼저 소비한 뒤 유료 과금이 시작되지만, Copilot access는 포함 크레딧이 없어 첫 크레딧 사용부터 과금됩니다. 하단 막대는 Business 20석 가상 예시에서 개인 상한 합계 $640 중 공유 포함분 $380을 제외한 초과 가능액 $260을 전사 유료 상한 $100에서 제한하는 구조를 보여줍니다.</desc>
+
+              <text x="20" y="30" font-size="13" font-weight="700" fill="var(--cp-text)">1. 플랜별 크레딧 소비와 유료 과금 시작 시점</text>
+
+              <!-- Plan 1: Business -->
+              <text x="20" y="62" font-size="12.5" font-weight="700" fill="var(--cp-text)">Copilot Business</text>
+              <text x="20" y="79" font-size="11" fill="var(--cp-text-muted)">$19 / 인·월</text>
+              <rect x="204" y="44" width="290" height="38" rx="7" fill="var(--cp-surface-soft)" stroke="var(--cp-success)" stroke-width="1.6"/>
+              <text x="349" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="var(--cp-success)">공유 포함 풀 (좌석당 월 1,900 cr)</text>
+              <rect x="502" y="44" width="438" height="38" rx="7" fill="var(--cp-bg-elevated)" stroke="var(--cp-border-strong)" stroke-width="1.2" stroke-dasharray="5 3"/>
+              <text x="721" y="68" text-anchor="middle" font-size="11.5" fill="var(--cp-text-muted)">풀 소진 후 → Paid usage 허용 및 지출 한도 내에서 과금</text>
+
+              <!-- Plan 2: Enterprise -->
+              <text x="20" y="112" font-size="12.5" font-weight="700" fill="var(--cp-text)">Copilot Enterprise</text>
+              <text x="20" y="129" font-size="11" fill="var(--cp-text-muted)">$39 / 인·월 (GHEC 필요)</text>
+              <rect x="204" y="94" width="480" height="38" rx="7" fill="var(--cp-surface-soft)" stroke="var(--cp-success)" stroke-width="1.6"/>
+              <text x="444" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="var(--cp-success)">공유 포함 풀 (좌석당 월 3,900 cr · Org 배정)</text>
+              <rect x="692" y="94" width="248" height="38" rx="7" fill="var(--cp-bg-elevated)" stroke="var(--cp-border-strong)" stroke-width="1.2" stroke-dasharray="5 3"/>
+              <text x="816" y="118" text-anchor="middle" font-size="11.5" fill="var(--cp-text-muted)">풀 소진 후 유료 구간</text>
+
+              <!-- Plan 3: Copilot access -->
+              <text x="20" y="162" font-size="12.5" font-weight="700" fill="var(--cp-accent)">Copilot access</text>
+              <text x="20" y="179" font-size="11" fill="var(--cp-text-muted)">GHEC $0 / 단독 $10</text>
+              <rect x="204" y="144" width="736" height="38" rx="7" fill="var(--cp-accent-soft)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <text x="572" y="168" text-anchor="middle" font-size="12" font-weight="700" fill="var(--cp-accent)">포함 크레딧 없음 (0 cr) → 첫 크레딧부터 즉시 유료 과금 (Paid usage + 지출 상한 선행 필수)</text>
+
+              <line x1="20" y1="198" x2="940" y2="198" stroke="var(--cp-border)" stroke-width="1"/>
+
+              <!-- Sizing visual bar -->
+              <text x="20" y="222" font-size="13" font-weight="700" fill="var(--cp-text)">2. 가상 산정 예시 (Business 20석 · 18명 $30 + 2명 $50 = 개인 상한 단순 합 $640)</text>
+
+              <!-- Total $640 mapped across 736px (x=204..940): $380 = 437px, $100 = 115px, $160 = 184px -->
+              <rect x="204" y="236" width="437" height="44" rx="7" fill="var(--cp-surface-soft)" stroke="var(--cp-success)" stroke-width="1.6"/>
+              <text x="422" y="256" text-anchor="middle" font-size="12" font-weight="700" fill="var(--cp-success)">20석 공유 포함량 38,000 cr ($380 상당)</text>
+              <text x="422" y="272" text-anchor="middle" font-size="10.5" fill="var(--cp-text-muted)">정가 좌석료 $380에 포함</text>
+
+              <rect x="645" y="236" width="115" height="44" rx="7" fill="var(--cp-accent-soft)" stroke="var(--cp-accent)" stroke-width="2"/>
+              <text x="702" y="256" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-accent)">유료 상한 $100</text>
+              <text x="702" y="272" text-anchor="middle" font-size="10.5" fill="var(--cp-text)">Stop ON 차단선</text>
+
+              <rect x="764" y="236" width="176" height="44" rx="7" fill="var(--cp-bg-elevated)" stroke="var(--cp-danger)" stroke-width="1.3" stroke-dasharray="4 3"/>
+              <text x="852" y="256" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-danger)">차단 구간 ($160)</text>
+              <text x="852" y="272" text-anchor="middle" font-size="10.5" fill="var(--cp-text-muted)">개인 한도 남아도 중단</text>
+
+              <text x="20" y="256" font-size="11.5" font-weight="700" fill="var(--cp-text)">최대 노출 통제</text>
+              <text x="20" y="273" font-size="11" fill="var(--cp-text-muted)">차액 $260 → $100 제한</text>
+              <text x="204" y="298" font-size="11" fill="var(--cp-text-muted)">※ 전원이 동시에 개인 상한까지 쓰지 않더라도, 전사 유료 지출 상한($100 + Stop)이 월 추가 과금의 최대치를 고정합니다.</text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">같은 Enterprise 안에서는 Copilot access와 기존 Business·Enterprise 좌석을 병행할 수 없으므로 전환 전 과금 구조를 먼저 검토합니다.</figcaption>
+        </figure>
+
         <h3 class="method">설정 방법: 좌석 배정 주체와 과금 시작 시점 확인</h3>
         <div class="table-wrap">
           <table class="responsive">
@@ -353,7 +882,12 @@
       </section>
 
       <section id="checklist">
+        <div class="sec-kicker"><span class="sec-tag neutral">05 · 운영 점검</span></div>
         <h2>배포 전 운영 체크리스트</h2>
+        <div class="check-status">
+          <span>설정 반영 전후로 아래 4가지 항목을 순서대로 점검하세요.</span>
+          <strong id="check-progress" aria-live="polite">0 / 4 확인됨</strong>
+        </div>
         <div class="checks">
           <label><input type="checkbox" autocomplete="off"> <span>좌석료와 사용량 예산을 구분하고 올바른 Enterprise·플랜으로 접속했다.</span></label>
           <label><input type="checkbox" autocomplete="off"> <span>기존 예산과 귀속을 기록하고, 전사 기본·부서 기본·개인 예외의 실제 적용 순서를 확인했다.</span></label>
@@ -364,6 +898,7 @@
       </section>
 
       <section id="sources">
+        <div class="sec-kicker"><span class="sec-tag neutral">06 · 공식 출처</span></div>
         <h2>GitHub 공식 문서</h2>
         <p>2026년 11월 18일 기준. 본문의 계산값은 설정을 설명하기 위한 가상 예시이며, 특정 환경의 실제 청구액이나 처리 결과가 아닙니다.</p>
         <ul>
@@ -381,8 +916,76 @@
       </section>
 
       <section id="diagnostics" aria-labelledby="diagnostics-title">
+        <div class="sec-kicker"><span class="sec-tag neutral">TS · 진단 가이드</span><span class="label">원인 확인 전 기존 좌석·예산 삭제 금지</span></div>
         <h2 id="diagnostics-title">트러블슈팅</h2>
         <p>보이는 증상에 맞춰 아래 순서로 확인합니다. 원인이 확인되기 전에는 좌석이나 예산을 삭제하지 않습니다.</p>
+
+        <figure class="visual-box">
+          <div class="visual-head">
+            <span class="visual-title"><span class="visual-badge">진단 맵</span>증상별 원인 분리 경로와 관리자 4대 확인 화면</span>
+            <span class="visual-hint">영향 범위(1명 vs 다수)와 비교 기준 화면을 먼저 고정</span>
+          </div>
+          <div class="visual-scroll">
+            <svg class="wide-svg" viewBox="0 0 960 304" role="img" aria-labelledby="svg-diag-title svg-diag-desc">
+              <title id="svg-diag-title">트러블슈팅 증상 분기 및 관리자 4대 화면 역할 대조도</title>
+              <desc id="svg-diag-desc">채팅 차단 시 1명만 막히면 계정·좌석·개인 한도를, 부서나 전사 다수가 막히면 부서 포함량·유료 사용 정책·지출 예산 Stop을 점검합니다. 숫자 비교 시에는 Licensing, AI usage, Metered usage, 발행 청구서 네 화면의 역할을 구분합니다.</desc>
+
+              <!-- Left: Symptom Triage Tree -->
+              <rect x="16" y="14" width="460" height="276" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="34" y="40" font-size="13" font-weight="700" fill="var(--cp-text)">1. 사용 차단 시 영향 범위별 점검 순서</text>
+
+              <rect x="34" y="56" width="124" height="58" rx="8" fill="var(--cp-accent)"/>
+              <text x="96" y="81" text-anchor="middle" font-size="12" font-weight="700" fill="var(--cp-accent-fg)">Chat 응답 중단</text>
+              <text x="96" y="99" text-anchor="middle" font-size="10.5" fill="var(--cp-accent-fg)">(코드 완성은 동작)</text>
+
+              <path d="M 158 74 L 194 74" fill="none" stroke="var(--cp-accent)" stroke-width="1.8" marker-end="url(#arr-main)"/>
+              <path d="M 158 98 L 176 98 L 176 168 L 194 168" fill="none" stroke="var(--cp-accent)" stroke-width="1.8" marker-end="url(#arr-main)"/>
+
+              <rect x="200" y="50" width="258" height="74" rx="8" fill="var(--cp-surface)" stroke="var(--cp-border-strong)" stroke-width="1.3"/>
+              <text x="214" y="71" font-size="12" font-weight="700" fill="var(--cp-text)">A. 특정 1명만 막힘</text>
+              <text x="214" y="89" font-size="11" fill="var(--cp-text-muted)">① IDE 로그인 계정·좌석 확인</text>
+              <text x="214" y="106" font-size="11" fill="var(--cp-accent)">② 적용된 Users 한도(개인→부서→전사) 확인</text>
+
+              <rect x="200" y="136" width="258" height="82" rx="8" fill="var(--cp-surface)" stroke="var(--cp-warning)" stroke-width="1.5"/>
+              <text x="214" y="157" font-size="12" font-weight="700" fill="var(--cp-text)">B. 부서·전사 여러 명이 동시 막힘</text>
+              <text x="214" y="175" font-size="11" fill="var(--cp-text-muted)">① 부서 Included 상한·전사 공유 풀 잔량</text>
+              <text x="214" y="192" font-size="11" fill="var(--cp-text-muted)">② AI credits paid usage 정책 허용 여부</text>
+              <text x="214" y="209" font-size="11" font-weight="700" fill="var(--cp-danger)">③ 부서·전사 지출 상한 Stop 도달 (개인 증액 무효)</text>
+
+              <rect x="34" y="232" width="424" height="42" rx="8" fill="var(--cp-bg-elevated)" stroke="var(--cp-border)" stroke-width="1"/>
+              <text x="48" y="257" font-size="11.5" fill="var(--cp-text)">편집 화면 오류 발생 시: 기존 개인 예산을 삭제하거나 $0으로 덮어쓰지 말고 유지</text>
+
+              <!-- Right: 4 Admin Screens Matrix -->
+              <rect x="492" y="14" width="452" height="276" rx="12" fill="var(--cp-surface-soft)" stroke="var(--cp-border-strong)" stroke-width="1.5"/>
+              <text x="510" y="40" font-size="13" font-weight="700" fill="var(--cp-text)">2. 숫자가 다르게 보일 때 비교할 4대 화면</text>
+
+              <rect x="510" y="56" width="202" height="98" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1.2"/>
+              <text x="524" y="78" font-size="12" font-weight="700" fill="var(--cp-accent)">Licensing</text>
+              <text x="524" y="97" font-size="11" fill="var(--cp-text)">현재 소비 좌석 vs</text>
+              <text x="524" y="114" font-size="11" fill="var(--cp-text)">당월 청구 대상 좌석</text>
+              <text x="524" y="136" font-size="10.5" fill="var(--cp-text-muted)">현재 0석이어도 당월 이력 남음</text>
+
+              <rect x="724" y="56" width="202" height="98" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1.2"/>
+              <text x="738" y="78" font-size="12" font-weight="700" fill="var(--cp-accent)">Usage → AI usage</text>
+              <text x="738" y="97" font-size="11" fill="var(--cp-text)">사용자별 크레딧 소비량</text>
+              <text x="738" y="114" font-size="11" fill="var(--cp-text)">(포함분·유료분 활동 내역)</text>
+              <text x="738" y="136" font-size="10.5" fill="var(--cp-text-muted)">부서 설정 상한 증빙 필드 아님</text>
+
+              <rect x="510" y="168" width="202" height="106" rx="9" fill="var(--cp-surface)" stroke="var(--cp-border)" stroke-width="1.2"/>
+              <text x="524" y="190" font-size="12" font-weight="700" fill="var(--cp-accent)">Usage → Metered usage</text>
+              <text x="524" y="209" font-size="11" fill="var(--cp-text)">일별·SKU별 청구 대상 내역</text>
+              <text x="524" y="226" font-size="11" fill="var(--cp-text)">(수량 × 단가 = net_amount)</text>
+              <text x="524" y="248" font-size="10.5" fill="var(--cp-text-muted)">최근 날짜에도 찍히는지 확인</text>
+
+              <rect x="724" y="168" width="202" height="106" rx="9" fill="var(--cp-surface)" stroke="var(--cp-success)" stroke-width="1.5"/>
+              <text x="738" y="190" font-size="12" font-weight="700" fill="var(--cp-success)">발행된 청구서 · 티켓</text>
+              <text x="738" y="209" font-size="11" fill="var(--cp-text)">월말 최종 확정 청구 금액</text>
+              <text x="738" y="226" font-size="11" fill="var(--cp-text)">(Azure Invoices 등)</text>
+              <text x="738" y="248" font-size="10.5" fill="var(--cp-text-muted)">조정 여부는 Support My Tickets</text>
+            </svg>
+          </div>
+          <figcaption class="visual-cap">서로 다른 화면의 숫자를 비교할 때는 반드시 같은 청구월·날짜·제품 코드(SKU)·귀속 부서(cost_center_name) 기준으로 맞춥니다.</figcaption>
+        </figure>
 
         <figure class="case-diagram">
           <figcaption><h3>한 사람만 Copilot Chat 사용 불가</h3></figcaption>
@@ -437,6 +1040,47 @@
               <p>14 × 1,900입니다. 월중 변경 시점이나 좌석 귀속을 반영한 확정값은 아닙니다.</p>
             </div>
           </div>
+
+          <figure class="visual-box">
+            <div class="visual-head">
+              <span class="visual-title"><span class="visual-badge">반영 시점 타임라인</span>월중 좌석·부서 귀속 변경 시 포함 상한 반영 기준 (UTC)</span>
+              <span class="visual-hint">증가는 즉시 · 감소와 부서 이동 재계산은 다음 청구 주기</span>
+            </div>
+            <div class="visual-scroll">
+              <svg class="wide-svg" viewBox="0 0 960 196" role="img" aria-labelledby="svg-cycle-title svg-cycle-desc">
+                <title id="svg-cycle-title">월중 변경에 따른 포함 크레딧 상한 반영 시점 타임라인</title>
+                <desc id="svg-cycle-desc">매월 1일 00:00 UTC에 공유 풀이 리셋됩니다. 월중 좌석 추가에 따른 공유 풀 증가는 즉시 반영되지만, 좌석 회수에 따른 감소와 포함량 제어가 켜진 Cost Center 간 이동의 상한 재계산은 다음 청구 주기 시작 시점에 반영됩니다.</desc>
+
+                <!-- Timeline Axis -->
+                <line x1="56" y1="98" x2="904" y2="98" stroke="var(--cp-border-strong)" stroke-width="2.5"/>
+                <circle cx="96" cy="98" r="7" fill="var(--cp-accent)"/>
+                <circle cx="364" cy="98" r="7" fill="var(--cp-text)"/>
+                <circle cx="856" cy="98" r="7" fill="var(--cp-accent)"/>
+
+                <text x="96" y="76" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-accent)">당월 1일 00:00 UTC</text>
+                <text x="96" y="122" text-anchor="middle" font-size="10.5" fill="var(--cp-text-muted)">한국시간 09:00 · 풀 리셋</text>
+
+                <text x="348" y="76" text-anchor="end" font-size="11.5" font-weight="700" fill="var(--cp-text)">월중 좌석·귀속 변경</text>
+                <text x="348" y="122" text-anchor="end" font-size="10.5" fill="var(--cp-text-muted)">추가 / 회수 / 부서 이동</text>
+
+                <text x="856" y="76" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cp-accent)">익월 1일 00:00 UTC</text>
+                <text x="856" y="124" text-anchor="middle" font-size="10.5" fill="var(--cp-text-muted)">다음 청구 주기 시작</text>
+
+                <!-- Top Immediate Box -->
+                <path d="M 368 91 L 392 42 L 408 42" fill="none" stroke="var(--cp-success)" stroke-width="1.8"/>
+                <rect x="408" y="14" width="344" height="54" rx="8" fill="var(--cp-surface-soft)" stroke="var(--cp-success)" stroke-width="1.6"/>
+                <text x="424" y="36" font-size="12" font-weight="700" fill="var(--cp-success)">즉시 반영: 좌석 추가 시 공유 풀 증가</text>
+                <text x="424" y="55" font-size="11" fill="var(--cp-text-muted)">신규 좌석료 일할 계산 · 포함 크레딧도 일할 계산 가능</text>
+
+                <!-- Bottom Next-Cycle Box -->
+                <path d="M 368 105 L 392 154 L 408 154" fill="none" stroke="var(--cp-warning)" stroke-width="1.8"/>
+                <rect x="408" y="126" width="364" height="54" rx="8" fill="var(--cp-surface-soft)" stroke="var(--cp-warning)" stroke-width="1.6"/>
+                <text x="424" y="148" font-size="12" font-weight="700" fill="var(--cp-warning)">익월 주기 반영: 좌석 회수 감소 · CC 포함 상한 감소</text>
+                <text x="424" y="167" font-size="11" fill="var(--cp-text-muted)">포함량 제어 CC 간 이동 상한 재계산도 다음 주기에 적용</text>
+                <path d="M 772 154 L 806 154 L 850 105" fill="none" stroke="var(--cp-warning)" stroke-width="1.8" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
+          </figure>
           <ol class="steps">
             <li><strong>화면 기준 고정.</strong> <strong>Billing and licensing → Cost centers → 대상 → View details</strong>에서 <strong>AI credit pool enabled</strong>의 분자(사용량)와 분모(포함 사용 상한)를 기록합니다. 조회 시각·청구월·직접 사용자·연결된 Enterprise Team을 함께 확인합니다.</li>
             <li><strong>실제 좌석 대조.</strong> <strong>Licensing → Copilot → Manage</strong> 또는 라이선스 보고서에서 Business/Enterprise와 할당 경로를 대조합니다. 직접 할당, Enterprise Team, Organization으로 들어온 좌석을 사용자별로 중복 없이 확인합니다. Cost Center에 등록됐어도 좌석이 없으면 포함량을 만들지 않습니다.</li>
@@ -509,13 +1153,79 @@
   <script>
     (() => {
       const root = document.documentElement;
-      let theme;
+      const themeBtn = document.getElementById("theme-toggle");
+      const printBtn = document.getElementById("print-btn");
+
+      const syncThemeLabel = () => {
+        if (!themeBtn) return;
+        const isDark = root.getAttribute("data-theme") === "dark";
+        themeBtn.textContent = isDark ? "라이트" : "다크";
+        themeBtn.setAttribute("aria-label", isDark ? "라이트 테마로 전환" : "다크 테마로 전환");
+      };
+      syncThemeLabel();
+
+      if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+          const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          syncThemeLabel();
+        });
+      }
+      if (printBtn) {
+        printBtn.addEventListener("click", () => window.print());
+      }
+
+      const navLinks = Array.from(document.querySelectorAll('nav a[href^="#"]'));
+      const sections = navLinks
+        .map((link) => document.getElementById(link.getAttribute("href").slice(1)))
+        .filter(Boolean);
+
+      if ("IntersectionObserver" in window && sections.length) {
+        const setActive = (id) => {
+          navLinks.forEach((link) => {
+            if (link.getAttribute("href") === "#" + id) {
+              link.setAttribute("aria-current", "location");
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          });
+        };
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((e) => e.isIntersecting)
+              .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+            if (visible.length) setActive(visible[0].target.id);
+          },
+          { rootMargin: "-12% 0px -70% 0px", threshold: [0, 0.1] }
+        );
+        sections.forEach((sec) => observer.observe(sec));
+      }
+
+      const checkInputs = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]'));
+      const checkProgress = document.getElementById("check-progress");
+      const updateChecklist = () => {
+        let done = 0;
+        checkInputs.forEach((inp) => {
+          const label = inp.closest("label");
+          if (inp.checked) done += 1;
+          if (label) label.classList.toggle("is-checked", inp.checked);
+        });
+        if (checkProgress) {
+          checkProgress.textContent = done + " / " + checkInputs.length + " 확인됨";
+        }
+      };
+      checkInputs.forEach((inp) => inp.addEventListener("change", updateChecklist));
+      updateChecklist();
+
+      let savedTheme;
       window.addEventListener("beforeprint", () => {
-        theme = root.dataset.theme;
+        savedTheme = root.dataset.theme;
         root.dataset.theme = "light";
       });
       window.addEventListener("afterprint", () => {
-        root.dataset.theme = theme;
+        if (savedTheme) root.dataset.theme = savedTheme;
+        syncThemeLabel();
       });
     })();
   </script>
